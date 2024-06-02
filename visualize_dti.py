@@ -2,7 +2,7 @@ import nibabel as nib
 from visualization_4d import visualize_4d
 
 # Load the NII file
-inst = "ETH"; id = "29058"; mod = "rest"
+inst = "BNI"; id = "29006"; mod = "dti"
 img = nib.load(inst+'/'+id+'/session_1/'+mod+'_1/'+mod+'.nii')
 
 # Get the image data
