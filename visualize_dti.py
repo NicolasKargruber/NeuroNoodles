@@ -1,9 +1,9 @@
 import nibabel as nib
 from visualization_4d import visualize_4d
 
-# Load the NII file
+# Load the NIFTI file
 inst = "BNI"; id = "29006"; mod = "dti"
-img = nib.load(inst+'/'+id+'/session_1/'+mod+'_1/'+mod+'.nii')
+img = nib.load(inst+'/'+id+'/session_1/'+mod+'_1/'+mod+'.nii.gz')
 
 # Get the image data
 image_data = img.get_fdata()

@@ -1,9 +1,9 @@
 import nibabel as nib
 from visualization import visualize
 
-# Load the NII file
+# Load the NIFTI file
 inst = "ETH"; id = "29058"; mod = "anat"
-img = nib.load(inst+'/'+id+'/session_1/'+mod+'_1/'+mod+'_rpi_blocked_blocked.nii')
+img = nib.load(inst+'/'+id+'/session_1/'+mod+'_1/'+mod+'.nii.gz')
 
 # Get the image data
 image_data = img.get_fdata()
