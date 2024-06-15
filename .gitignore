@@ -162,3 +162,5 @@ cython_debug/
 ETH/
 BNI/
 USM/
+
+EMC/
