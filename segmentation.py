@@ -11,19 +11,20 @@ img = sitk.ReadImage(file_path+'/'+mod+'.nii.gz')
 # Specify the slice number
 slice_num = 90
 # Threshold parameters
-wm_threshold = 1200
-gm_threshold = 690
+wm_threshold = 0.22
+gm_threshold = 0.122
 csf_threshold = 0
 
-# Maximum Intensity in image
+# Min-Max-Normalize image to [0, 1]
 img_data = sitk.GetArrayFromImage(img)
-max_intensity = float(np.max(img_data)) # to Double
-print(f"Maximum intensity value: {max_intensity}")
+img_data_normalized = (img_data - np.min(img_data)) / (np.max(img_data) - np.min(img_data))
+img_normalized = sitk.GetImageFromArray(img_data_normalized)
+img_normalized.CopyInformation(img)
 
 # >> Original Data <<
 
 # Extract Sice
-slice_data = sitk.GetArrayViewFromImage(img)[slice_num, :, :]
+slice_data = sitk.GetArrayViewFromImage(img_normalized)[slice_num, :, :]
 
 # Display the ORIGINAL slice
 plt.figure(figsize=(24, 6))
@@ -32,7 +33,7 @@ plot_image_subplot((1, 5, 1), slice_data, f'Original Slice {slice_num}')
 # >> White Matter <<
 
 # White Matter - Mask
-white_matter = extract_largest_component(img, wm_threshold, max_intensity)
+white_matter = extract_largest_component(img_normalized, wm_threshold)
 
 # Extract mask from original slice
 white_matter_data = slice_data.copy()
@@ -45,7 +46,7 @@ plot_image_subplot((1, 5, 2), white_matter_data, title)
 # >> Grey Matter <<
 
 # Grey Matter - Mask
-grey_matter = extract_largest_component(img, gm_threshold, wm_threshold)
+grey_matter = extract_largest_component(img_normalized, gm_threshold, wm_threshold)
 
 # Extract mask from original slice
 grey_matter_data = slice_data.copy()
@@ -58,7 +59,7 @@ plot_image_subplot((1, 5, 3), grey_matter_data, title)
 # >> Central Spinal Fluid <<
 
 # Central Spinal Fluid - Mask
-central_spinal_fluid = extract_largest_component(img, csf_threshold, 600)
+central_spinal_fluid = extract_largest_component(img_normalized, csf_threshold, gm_threshold)
 
 # Extract mask from original slice
 csf_data = slice_data.copy()
@@ -75,15 +76,15 @@ overlay_data = np.stack([slice_data] * 3, axis=-1)
 
 # Apply colors
 # White matter in red
-overlay_data[..., 0][sitk.GetArrayViewFromImage(white_matter)[slice_num, :, :] > 0] = max_intensity
+overlay_data[..., 0][sitk.GetArrayViewFromImage(white_matter)[slice_num, :, :] > 0] = 1
 # Grey matter in green
-overlay_data[..., 1][sitk.GetArrayViewFromImage(grey_matter)[slice_num, :, :] > 0] = max_intensity
+overlay_data[..., 1][sitk.GetArrayViewFromImage(grey_matter)[slice_num, :, :] > 0] = 1
 # CSF in blue
-overlay_data[..., 2][sitk.GetArrayViewFromImage(central_spinal_fluid)[slice_num, :, :] > 0] = max_intensity
+overlay_data[..., 2][sitk.GetArrayViewFromImage(central_spinal_fluid)[slice_num, :, :] > 0] = 1
 
 # Display the overlay image
 title = f'CSF (Threshold > {csf_threshold})'
-plot_image_subplot((1, 5, 5), overlay_data / max_intensity, 'Overlay of Masks') # Normalize the image to range [0, 1] for display
+plot_image_subplot((1, 5, 5), overlay_data, 'Overlay of Masks')
 
 # Show the plot
 plt.tight_layout()

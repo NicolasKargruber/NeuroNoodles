@@ -2,7 +2,7 @@ import SimpleITK as sitk
 import numpy as np
 import matplotlib.pyplot as plt
 
-def extract_largest_component(image, lower, upper):
+def extract_largest_component(image, lower, upper = 1):
     # Apply binary thresholding to create a mask for white matter
     binary_mask = sitk.BinaryThreshold(image, lowerThreshold=lower, upperThreshold=upper)
     binary_mask_np = sitk.GetArrayViewFromImage(binary_mask)
