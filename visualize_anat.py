@@ -2,7 +2,7 @@ import nibabel as nib
 from visualization import visualize
 
 # Load the NIFTI file
-inst = "ETH"; id = "29058"; mod = "anat"
+inst = "EMC"; id = "29916"; mod = "anat"
 img = nib.load(inst+'/'+id+'/session_1/'+mod+'_1/'+mod+'.nii.gz')
 
 # Get the image data

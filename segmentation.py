@@ -4,15 +4,15 @@ import matplotlib.pyplot as plt
 from masks_utils import extract_largest_component, save_masks, plot_image_subplot
 
 # Load the NIFTI file
-inst = "EMC"; id = "29886"; mod = "anat"
+inst = "EMC"; id = "29889"; mod = "anat"
 file_path = inst+'/'+id+'/session_1/'+mod+'_1'
 img = sitk.ReadImage(file_path+'/'+mod+'.nii.gz')
 
 # Specify the slice number
-slice_num = 136
+slice_num = 143
 # Threshold parameters
-wm_threshold = 0.273
-gm_threshold = 0.19
+wm_threshold = 0.3
+gm_threshold = 0.2
 csf_threshold = 0
 
 # Min-Max-Normalize image to [0, 1]
