@@ -56,9 +56,9 @@ grey_matter_data[sitk.GetArrayViewFromImage(grey_matter)[slice_num, :, :] == 0] 
 title = f'Grey Matter (Threshold > {gm_threshold})'
 plot_image_subplot((2, 3, 2), grey_matter_data, title)
 
-# >> Central Spinal Fluid <<
+# >> Cerebrospinal Fluid <<
 
-# Central Spinal Fluid - Mask
+# Cerebrospinal Fluid - Mask
 central_spinal_fluid = extract_largest_component(img_normalized, csf_threshold, gm_threshold)
 
 # Extract mask from original slice
