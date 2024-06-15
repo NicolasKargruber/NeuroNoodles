@@ -4,15 +4,15 @@ import matplotlib.pyplot as plt
 from masks_utils import extract_largest_component, save_masks, plot_image_subplot
 
 # Load the NIFTI file
-inst = "ETH"; id = "29058"; mod = "anat"
+inst = "EMC"; id = "29886"; mod = "anat"
 file_path = inst+'/'+id+'/session_1/'+mod+'_1'
 img = sitk.ReadImage(file_path+'/'+mod+'.nii.gz')
 
 # Specify the slice number
-slice_num = 90
+slice_num = 136
 # Threshold parameters
-wm_threshold = 0.22
-gm_threshold = 0.122
+wm_threshold = 0.273
+gm_threshold = 0.19
 csf_threshold = 0
 
 # Min-Max-Normalize image to [0, 1]
@@ -27,8 +27,8 @@ img_normalized.CopyInformation(img)
 slice_data = sitk.GetArrayViewFromImage(img_normalized)[slice_num, :, :]
 
 # Display the ORIGINAL slice
-plt.figure(figsize=(24, 6))
-plot_image_subplot((1, 5, 1), slice_data, f'Original Slice {slice_num}')
+plt.figure(figsize=(10, 8))
+plot_image_subplot((2, 3, 4), slice_data, f'Original Slice {slice_num}')
 
 # >> White Matter <<
 
@@ -41,7 +41,7 @@ white_matter_data[sitk.GetArrayViewFromImage(white_matter)[slice_num, :, :] == 0
 
 # Display slice with WHITE MATTER
 title = f'White Matter (Threshold > {wm_threshold})'
-plot_image_subplot((1, 5, 2), white_matter_data, title)
+plot_image_subplot((2, 3, 1), white_matter_data, title)
 
 # >> Grey Matter <<
 
@@ -54,7 +54,7 @@ grey_matter_data[sitk.GetArrayViewFromImage(grey_matter)[slice_num, :, :] == 0] 
 
 # Display slice with GREY MATTER
 title = f'Grey Matter (Threshold > {gm_threshold})'
-plot_image_subplot((1, 5, 3), grey_matter_data, title)
+plot_image_subplot((2, 3, 2), grey_matter_data, title)
 
 # >> Central Spinal Fluid <<
 
@@ -67,7 +67,7 @@ csf_data[sitk.GetArrayViewFromImage(central_spinal_fluid)[slice_num, :, :] == 0]
 
 # Display slice with CSF
 title = f'CSF (Threshold > {csf_threshold})'
-plot_image_subplot((1, 5, 4), csf_data, title)
+plot_image_subplot((2, 3, 3), csf_data, title)
 
 # >> Overlay <<
 
@@ -83,8 +83,7 @@ overlay_data[..., 1][sitk.GetArrayViewFromImage(grey_matter)[slice_num, :, :] > 
 overlay_data[..., 2][sitk.GetArrayViewFromImage(central_spinal_fluid)[slice_num, :, :] > 0] = 1
 
 # Display the overlay image
-title = f'CSF (Threshold > {csf_threshold})'
-plot_image_subplot((1, 5, 5), overlay_data, 'Overlay of Masks')
+plot_image_subplot((2, 3, 5), overlay_data, 'Overlay of Masks')
 
 # Show the plot
 plt.tight_layout()
